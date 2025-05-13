@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Finance Hub</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: #f7fafc;
+      color: #222;
+    }
+    header {
+      background: #4caf50;
+      color: #fff;
+      padding: 1.5rem 0;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(76,175,80,0.1);
+    }
+    nav a {
+      color: #fff;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    main {
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+    }
+    section {
+      margin-bottom: 2.5rem;
+    }
+    h2 {
+      color: #388e3c;
+      margin-bottom: 1rem;
+    }
+    form label {
+      display: block;
+      margin: 0.7rem 0 0.2rem;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 0.8rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      background: #388e3c;
+      color: #fff;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #2e7031;
+    }
+    #error {
+      color: #d32f2f;
+      min-height: 1.5em;
+      margin-top: 0.5em;
+    }
+    #result {
+      margin-top: 1.5em;
+      font-size: 1.2em;
+      color: #2e7031;
+      min-height: 2em;
+      transition: opacity 0.6s;
+      opacity: 0;
+    }
+    ul {
+      padding-left: 1.3em;
+    }
+    footer {
+      text-align: center;
+      padding: 1.2rem 0;
+      background: #e8f5e9;
+      color: #388e3c;
+      margin-top: 2rem;
+    }
+    @media (max-width: 600px) {
+      main { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Smart Finance Hub</h1>
+    <nav>
+      <a href="#calculator">Calculator</a>
+      <a href="#tips">Tips</a>
+      <a href="#resources">Resources</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Calculator Section -->
+    <section id="calculator" aria-labelledby="calc-title">
+      <h2 id="calc-title">Compound Interest Calculator</h2>
+      <form id="calcForm" autocomplete="off">
+        <label for="amount">Principal Amount ($):</label>
+        <input type="number" id="amount" name="amount" min="1" required />
+
+        <label for="rate">Annual Interest Rate (%):</label>
+        <input type="number" id="rate" name="rate" min="0" max="100" required />
+
+        <label for="years">Years:</label>
+        <input type="number" id="years" name="years" min="1" max="100" required />
+
+        <button type="submit">Calculate</button>
+        <div id="error" aria-live="polite"></div>
+      </form>
+      <div id="result" aria-live="polite"></div>
+    </section>
+
+    <!-- Tips Section -->
+    <section id="tips" aria-labelledby="tips-title">
+      <h2 id="tips-title">Personal Finance Tips</h2>
+      <ul>
+        <li>Track your expenses and create a realistic budget.</li>
+        <li>Build an emergency fund covering 3-6 months of expenses.</li>
+        <li>Invest early to benefit from compound interest.</li>
+        <li>Avoid high-interest debt and pay off credit cards monthly.</li>
+        <li>Review your financial goals annually.</li>
+      </ul>
+    </section>
+
+    <!-- Resources Section -->
+    <section id="resources" aria-labelledby="resources-title">
+      <h2 id="resources-title">Useful Resources</h2>
+      <ul>
+        <li><a href="https://www.investopedia.com/" target="_blank" rel="noopener">Investopedia</a></li>
+        <li><a href="https://www.nerdwallet.com/" target="_blank" rel="noopener">NerdWallet</a></li>
+        <li><a href="https://www.consumerfinance.gov/" target="_blank" rel="noopener">CFPB</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Smart Finance Hub</p>
+  </footer>
+  <script>
+    const form = document.getElementById('calcForm');
+    const errorDiv = document.getElementById('error');
+    const resultDiv = document.getElementById('result');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      errorDiv.textContent = '';
+      resultDiv.style.opacity = 0;
+
+      // Get values
+      const amount = parseFloat(form.amount.value);
+      const rate = parseFloat(form.rate.value);
+      const years = parseInt(form.years.value);
+
+      // Validation
+      if (isNaN(amount) || amount <= 0) {
+        errorDiv.textContent = 'Please enter a valid positive amount.';
+        return;
+      }
+      if (isNaN(rate) || rate < 0 || rate > 100) {
+        errorDiv.textContent = 'Please enter a valid interest rate (0-100).';
+        return;
+      }
+      if (isNaN(years) || years < 1 || years > 100) {
+        errorDiv.textContent = 'Please enter a valid number of years (1-100).';
+        return;
+      }
+
+      // Calculation: Compound Interest
+      // FV = P * (1 + r/100)^t
+      const fv = amount * Math.pow(1 + rate/100, years);
+
+      // Animate result
+      resultDiv.textContent = `Future Value: $${fv.toFixed(2)}`;
+      setTimeout(() => { resultDiv.style.opacity = 1; }, 100);
+    });
+  </script>
+</body>
+</html>
